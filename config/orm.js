@@ -16,7 +16,7 @@ var orm = {
     eatOne: function(id, cb){
         console.log("update one");
         console.log(id);
-        connection.query(`UPDATE burgers_db.burgers SET devoured=1 WHERE id=${id}`, function(err, data){
+        connection.query(`UPDATE burgers SET devoured=1 WHERE id=${id}`, function(err, data){
             if(err) throw err.stack;
             cb(data);
         });
