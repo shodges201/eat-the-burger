@@ -1,0 +1,85 @@
+<h1 id="header">Eat-Da-Burger</h1>
+
+<div id="container">
+  <table id="not-eaten-table">
+    <thead>
+      <th colspan="3">Not Eaten</th>
+    </thead>
+    <tbody id="not-eaten-body">
+      {{#each burgers}}
+      <tr class="burger-item" id="{{this.id}}">
+        {{#unless this.devoured}}
+        <td>
+          <p class="burger-name">{{this.burger_name}}</p>
+          <button class="waves-effect waves-light btn eat-burger" data-id="{{this.id}}">
+            Eat the burger
+          </button>
+        </td>
+        {{/unless}}
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div id="add-burger" class="row">
+    <form class="col s12" id="new-burger">
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea id="burger-name" class="materialize-textarea"></textarea>
+          <label for="burger-name">Textarea</label>
+          <button id="confirm" class="waves-effect waves-light btn">
+            New Burger
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<table id="eaten-table">
+  <thead>
+    <th colspan="3">Eaten</th>
+  </thead>
+  <tbody id="eaten-body">
+    {{#each burgers}}
+    <tr class="burger-item" id="{{this.id}}">
+      {{#if this.devoured}}
+      <td>
+        {{this.burger_name}}
+      </td>
+      {{/if}}
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+
+<script>
+  $(document).ready(function () {
+    $(document).on('click', '.eat-burger', function (event) {
+      let id = $(this).data('id');
+      console.log(id);
+      $.ajax({
+        url: '/eat',
+        type: 'PUT',
+        data: { id: id }
+      }).then(function (data) {
+        location.reload();
+      })
+    });
+
+    $(document).on('submit', '#new-burger', function (event) {
+      event.preventDefault();
+      let name = $('#burger-name').val().trim();
+      console.log(name);
+      $.ajax({
+        url: '/create',
+        type: 'post',
+        data: { name: name }
+      }).then(function (data) {
+        location.reload();
+      })
+    })
+
+  })
+</script>
